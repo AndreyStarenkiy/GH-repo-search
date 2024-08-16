@@ -3,22 +3,26 @@ const searched = document.querySelector('.container__searched');
 const saved = document.querySelector('.container__saved');
 
 async function getRepo(event) {
-    try {
-        const response = await fetch(`https://api.github.com/search/repositories?q=${event.target.value}&per_page=5`);
+    if (input.value !== '') {
+        try {
+            const response = await fetch(`https://api.github.com/search/repositories?q=${event.target.value}&per_page=5`);
 
-        const json = await response.json()
-        const items = json.items
+            const json = await response.json()
+            const items = json.items
 
-        deleteSearched()
+            deleteSearched()
 
-        items.forEach(item => {
-            addSearched(item)
-        })
+            items.forEach(item => {
+                addSearched(item)
+            })
 
-        console.log(items);
+            console.log(items);
 
-    } catch(error) {
-        console.log(error);
+        } catch(error) {
+            console.log(error);
+        }
+    } else {
+        deleteSearched();
     }
 }
 
@@ -41,6 +45,7 @@ function addSaved(item) {
 
     const nameRepo = document.createElement('p')
     nameRepo.textContent = `Name: ${item.name}`
+    nameRepo.classList.add('saved__name')
 
     const ownerRepo = document.createElement("p");
     ownerRepo.textContent = `Owner: ${item.owner.login}`
@@ -56,7 +61,7 @@ function addSaved(item) {
     const deleteRepo = document.createElement('button')
     deleteRepo.classList.add('container__close')
     deleteRepo.addEventListener('click', function (event) {
-        console.log('burger')
+        console.log('BigMac with Double Cheese')
         repo.remove()
     })
     repo.appendChild(textContent)
@@ -82,6 +87,6 @@ function debounce(fn, delay) {
     }
 }
 
-const getRepoDebounce = debounce(getRepo, 500);
+const getRepoDebounce = debounce(getRepo, 800);
 
 input.addEventListener('input', getRepoDebounce)
